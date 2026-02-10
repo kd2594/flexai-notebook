@@ -1,0 +1,115 @@
+services:
+  # Mock FlexAI API Server (for local testing without real FlexAI credentials)
+  mock-flexai:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.mock-flexai
+    container_name: flexai-mock-api
+    ports:
+      - "9000:9000"
+    networks:
+      - flexai-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: flexai-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - FLEXAI_API_KEY=${FLEXAI_API_KEY}
+      - FLEXAI_API_URL=${FLEXAI_API_URL}
+      - FLEXAI_ORG_ID=${FLEXAI_ORG_ID}
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - SECRET_KEY=${SECRET_KEY}
+      - REDIS_URL=${REDIS_URL}
+      - DATABASE_URL=${DATABASE_URL}
+      - MOCK_MODE=${MOCK_MODE:-true}
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+      - postgres
+      - mock-flexai
+    networks:
+      - flexai-network
+    restart: unless-stopped
+
+  jupyter:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.jupyter
+    container_name: flexai-jupyter
+    ports:
+      - "8888:8888"
+    environment:
+      - JUPYTER_TOKEN=${JUPYTER_TOKEN}
+      - JUPYTER_ENABLE_LAB=yes
+      - BACKEND_API_URL=http://backend:8000
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./frontend:/home/jovyan/.jupyter/custom
+      - jupyter-data:/home/jovyan
+    networks:
+      - flexai-network
+    restart: unless-stopped
+    command: >
+      start-notebook.sh
+      --ServerApp.token='${JUPYTER_TOKEN}'
+      --ServerApp.password=''
+      --ServerApp.allow_origin='*'
+
+  redis:
+    image: redis:7-alpine
+    container_name: flexai-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - flexai-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL for session persistence and data storage
+  postgres:
+    image: postgres:16-alpine
+    container_name: flexai-postgres
+    environment:
+      - POSTGRES_DB=flexai_notebook_db
+      - POSTGRES_USER=flexai_user
+      - POSTGRES_PASSWORD=flexai_password_local
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - flexai-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flexai_user -d flexai_notebook_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  flexai-network:
+    driver: bridge
+
+volumes:
+  jupyter-data:
+  redis-data:
+  postgres-data:

@@ -1,0 +1,74 @@
+/* Custom CSS for FlexAI Jupyter Notebook */
+
+/* GPU Selection Modal Styles */
+.gpu-card {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.gpu-card:hover {
+    border-color: #337ab7;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.gpu-card .panel-heading {
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+}
+
+/* FlexAI Branding */
+#flexai-widget {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+#flexai-gpu-btn.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+#flexai-gpu-btn.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+/* Status Messages */
+#gpu-selection-status .alert {
+    margin-bottom: 0;
+}
+
+/* Modal Styling */
+#flexai-gpu-modal .modal-dialog {
+    width: 800px;
+}
+
+#flexai-gpu-modal .modal-title i {
+    color: #337ab7;
+}
+
+/* GPU Card Labels */
+.gpu-card .label {
+    font-size: 11px;
+    padding: 3px 8px;
+    float: right;
+}
+
+/* Form Controls */
+.gpu-card select.form-control {
+    display: inline-block;
+    width: 100px;
+    padding: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #flexai-gpu-modal .modal-dialog {
+        width: 95%;
+    }
+    
+    .gpu-card {
+        margin-bottom: 10px;
+    }
+}

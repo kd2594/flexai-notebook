@@ -1,0 +1,7 @@
+{
+    "ServerApp": {
+        "jpserver_extensions": {
+            "flexai_gpu_selector": true
+        }
+    }
+}
