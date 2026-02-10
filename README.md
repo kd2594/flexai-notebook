@@ -2,6 +2,11 @@
 
 A Google Colab-like Jupyter Notebook environment integrated with FlexAI compute platform. This platform allows users to run ML workloads (PyTorch, TensorFlow, JAX, etc.) on FlexAI GPUs with an intuitive GPU selection interface.
 
+<img width="2316" height="1510" alt="image" src="https://github.com/user-attachments/assets/2fdde25b-fec1-4b09-a705-307ffecb9bd3" />
+
+<img width="2328" height="1506" alt="image" src="https://github.com/user-attachments/assets/374c7604-46b1-4ee6-a6a7-f0850f46c5ed" />
+
+
 ## ✨ Features
 
 - 🚀 **Jupyter Notebook Environment** - Full-featured Jupyter with JupyterLab support
