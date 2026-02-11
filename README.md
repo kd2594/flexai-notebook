@@ -165,12 +165,30 @@ API_HOST=0.0.0.0
 API_PORT=8000
 API_DEBUG=false
 
-# Security
-SECRET_KEY=your_secret_key_for_jwt_tokens
-ALLOWED_ORIGINS=http://localhost:8888,http://localhost:3000
+# Database Configuration (PostgreSQL running in Docker)
+DATABASE_URL=postgresql://flexai_user:flexai_password_local@postgres:5432/flexai_notebook_db
+
+# Redis Configuration (running in Docker)
+REDIS_URL=redis://redis:6379
+
+# Security - Auto-generated secure keys for local testing
+SECRET_KEY=local_dev_secret_key_change_in_production_f8e7d6c5b4a39281
+JWT_SECRET_KEY=jwt_local_secret_7a8b9c0d1e2f3g4h5i6j7k8l9m0n1o2p
+
+# CORS Configuration
+ALLOWED_ORIGINS=http://localhost:8888,http://localhost:3000,http://127.0.0.1:8888
 
 # Logging
 LOG_LEVEL=INFO
+
+# Feature Flags
+MOCK_MODE=true
+ENABLE_METRICS=false
+ENABLE_TELEMETRY=false
+
+# Session Configuration
+SESSION_TIMEOUT_MINUTES=60
+MAX_CONCURRENT_SESSIONS=10
 ```
 
 ### Configuration Options
